@@ -1,0 +1,23 @@
+services:
+  # The Reverse Proxy
+  reverse-proxy:
+    image: nginx:alpine
+    container_name: reverse-proxy
+    ports:
+      - "80:80"
+    volumes:
+      - ./nginx.conf:/etc/nginx/nginx.conf:ro
+    # No network definition needed here; it inherits "default"
+
+  # The Remote-Ready UI
+  aas-ui-remote:
+    image: eclipsebasyx/aas-gui:SNAPSHOT
+    container_name: aas-ui-remote
+    environment:
+      AAS_REGISTRY_PATH: /registry/shell-descriptors
+      SUBMODEL_REGISTRY_PATH: /sm-registry/submodel-descriptors
+      AAS_REPO_PATH: /aas-env/shells
+      SUBMODEL_REPO_PATH: /aas-env/submodels
+      CD_REPO_PATH: /aas-env/concept-descriptions
+      DASHBOARD_SERVICE_PATH: /dashboard-api/api/elements
+      PRIMARY_COLOR: '#1C39BB'
